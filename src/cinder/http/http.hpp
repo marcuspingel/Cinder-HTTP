@@ -66,8 +66,8 @@ public:
 		mSocket( service, context )
 	{
 		context.set_default_verify_paths();
-		auto &&host = url->host();
-		auto &&verification = asio::ssl::rfc2818_verification{std::move(host)};
+		auto host = url->host();
+		auto verification = asio::ssl::rfc2818_verification { std::move( host ) };
 		mSocket.set_verify_callback(verification);
 	}
 	
@@ -153,7 +153,7 @@ protected:
 	void createTimeout( std::chrono::nanoseconds timeout_duration )
 	{
 		timeout_clock = std::make_shared<Timer>( io_service );
-		auto &&self = this->shared_from_this();
+		auto self = this->shared_from_this();
 		timeout_clock->expires_from_now( timeout_duration );
 		timeout_clock->async_wait( [self]( asio::error_code ec ){ self->onDeadline( ec ); });
 	}
