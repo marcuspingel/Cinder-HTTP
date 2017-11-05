@@ -8,8 +8,9 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef URDL_URL_IPP
-#define URDL_URL_IPP
+#pragma once
+
+#include "cinder/Cinder.h"
 
 #include <cstring>
 #include <cctype>
@@ -403,7 +404,14 @@ bool Url::escape_path(const std::string& in, std::string& out )
 				escaped << c;
 				break;
 			default: {
-				if( std::isalnum(c) ) {
+#if defined( CINDER_MSW ) && ! defined( NDEBUG )
+				//	Visual Studio asserts on isalnum( c ) with c < 0 || c > 255 when using CRT Debug.
+				//	Unfortunately that forces this differentiation for the test.
+				const auto inRange = ! ( c < 0 || c > 255 );
+				if( inRange && std::isalnum( c ) ) {
+#else
+				if( std::isalnum( c ) ) {
+#endif
 					escaped << c;
 				}
 				else {
@@ -474,5 +482,3 @@ bool operator<(const Url& a, const Url& b)
 
 } // namespace http
 } // namespace cinder
-
-#endif // URDL_URL_IPP
