@@ -133,7 +133,7 @@ void Responder<SessionType>::extract_buffer()
 		CI_ASSERT( header );
 		auto &val = header->second;
 		auto &buf = mResponse->getContent();
-		buf = std::make_shared<ci::Buffer>( std::move( ci::decompressBuffer( encoded_buf, true, val == "gzip" ) ) );
+		buf = std::make_shared<ci::Buffer>( ci::decompressBuffer( encoded_buf, true, val == "gzip" ) );
 	}
 	else {
 		auto &buf = mResponse->getContent();
